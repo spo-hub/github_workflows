@@ -1,0 +1,11 @@
+# IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# General
+*.log
+.env
+.env.local
