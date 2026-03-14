@@ -1,0 +1,11 @@
+<div class="counter">
+  <h2>
+    Counter: <span data-testid="count-display">{{ count }}</span>
+  </h2>
+
+  <div class="buttons">
+    <button data-testid="increment-btn" (click)="increment()">Increment</button>
+    <button data-testid="decrement-btn" (click)="decrement()">Decrement</button>
+    <button data-testid="reset-btn" (click)="reset()">Reset</button>
+  </div>
+</div>
