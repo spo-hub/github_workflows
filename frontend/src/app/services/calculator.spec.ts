@@ -97,7 +97,8 @@ describe('Calculator', () => {
     });
 
     it('should divide negative nubmers', () => {
-      (expect(service.divide(-10, 2)).toBe(-5), expect(service.divide(10, -2)).toBe(-5));
+      expect(service.divide(-10, 2)).toBe(-5);
+      expect(service.divide(10, -2)).toBe(-5);
       expect(service.divide(-10, -2)).toBe(5);
     });
 
@@ -114,11 +115,7 @@ describe('Calculator', () => {
     it('should not add to history when division by zero fails', () => {
       const initialHistoryLength = service.getHistory().length;
 
-      try {
-        service.divide(10, 0);
-      } catch (e) {
-        // expected error
-      }
+      expect(() => service.divide(10, 0)).toThrow('cannot divide by zero');
 
       expect(service.getHistory().length).toBe(initialHistoryLength);
     });
@@ -130,7 +127,8 @@ describe('Calculator', () => {
     });
 
     it('should track multiple oepration', () => {
-      (service.add(2, 3), service.subtract(10, 5));
+      service.add(2, 3);
+      service.subtract(10, 5);
       service.multiply(4, 2);
 
       const history = service.getHistory();

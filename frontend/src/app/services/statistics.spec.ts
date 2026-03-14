@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { StatisticsService } from './statistics';
 import { CalculatorService } from './calculator';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MockedFunction<T extends (...args: any[]) => any> = ReturnType<typeof vi.fn<T>>;
 
 describe('StatisticsService', () => {
