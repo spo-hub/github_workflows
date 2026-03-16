@@ -46,11 +46,11 @@ jobs:
       - name: Run linter
         run: pnpm lint
 
-      - name: Run tests
-        run: pnpm test --run
+      #   - name: Run tests
+      #     run: pnpm test
 
       - name: Run tests with coverage
-        run: pnpm teset --coverage --run
+        run: pnpm test --coverage
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
