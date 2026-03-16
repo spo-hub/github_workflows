@@ -1,6 +1,6 @@
 # IDE
 .DS_Store
-.vscode/
+# .vscode/
 .idea/
 *.swp
 *.swo

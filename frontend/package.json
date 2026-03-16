@@ -9,7 +9,11 @@
     "test": "ng test",
     "test:coverage": "ng test --coverage",
     "test:coverage:open": "ng test --coverage && open coverage/frontend-app/index.html",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,css,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\"",
+    "format:lint": "pnpm format && pnpm lint:fix"
   },
   "private": true,
   "packageManager": "pnpm@10.32.1",
@@ -32,6 +36,8 @@
     "@vitest/coverage-v8": "^4.1.0",
     "angular-eslint": "21.3.0",
     "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
