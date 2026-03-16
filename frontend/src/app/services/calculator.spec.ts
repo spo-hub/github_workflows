@@ -115,7 +115,7 @@ describe('Calculator', () => {
     it('should not add to history when division by zero fails', () => {
       const initialHistoryLength = service.getHistory().length;
 
-      expect(() => service.divide(10, 0)).toThrow('cannot divide by zero');
+      expect(() => service.divide(10, 0)).toThrow('Cannot divide by zero');
 
       expect(service.getHistory().length).toBe(initialHistoryLength);
     });
