@@ -81,19 +81,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/cehckout@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node/-@v4
-        with:
-          node-version-file: "./frontend/.nvmrc"
-          cache: "pnpm"
-          cache-dependency-path: "./frontend/pnpm-lock.yaml"
+        uses: actions/checkout@v5
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: "./frontend/.nvmrc"
+          cache: "pnpm"
+          cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
