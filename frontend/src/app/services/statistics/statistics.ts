@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { CalculatorService } from './calculator';
+
+import { CalculatorService } from '../calculator/calculator';
 
 export interface Statistics {
   total: number;
