@@ -1,0 +1,10 @@
+{
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json": [
+      "openapi/**/*.yml",
+      "openapi/**/*.yaml"
+    ]
+  },
+  "yaml.format.enable": true,
+  "yaml.validate": true
+}
