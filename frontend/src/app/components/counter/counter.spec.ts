@@ -15,8 +15,6 @@ describe('Counter', () => {
     fixture = TestBed.createComponent(Counter);
     component = fixture.componentInstance;
     compiled = fixture.nativeElement;
-    // await fixture.whenStable();
-    // fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -24,7 +22,7 @@ describe('Counter', () => {
   });
 
   it('should initialize with count of 0', () => {
-    expect(component.count).toBe(0);
+    expect(component.count()).toBe(0);
   });
 
   it('should display initial count in the template', () => {
@@ -36,7 +34,7 @@ describe('Counter', () => {
   describe('increment()', () => {
     it('should increase count by 1', () => {
       component.increment();
-      expect(component.count).toBe(1);
+      expect(component.count()).toBe(1);
     });
 
     it('should update the display when incremented', () => {
@@ -53,7 +51,7 @@ describe('Counter', () => {
       button.click();
       fixture.detectChanges();
 
-      expect(component.count).toBe(1);
+      expect(component.count()).toBe(1);
       const counstDisplay = compiled.querySelector('[data-testid="count-display"]');
       expect(counstDisplay?.textContent).toBe('1');
     });
@@ -61,14 +59,14 @@ describe('Counter', () => {
 
   describe('decrement()', () => {
     it('should decrease count by 1', () => {
-      component.count = 5;
+      component.count.set(5);
       component.decrement();
-      expect(component.count).toBe(4);
+      expect(component.count()).toBe(4);
     });
 
     it('should allow negative numbers', () => {
       component.decrement();
-      expect(component.count).toBe(-1);
+      expect(component.count()).toBe(-1);
     });
 
     it('should decrement when button is clicked', () => {
@@ -76,26 +74,26 @@ describe('Counter', () => {
       button.click();
       fixture.detectChanges();
 
-      expect(component.count).toBe(-1);
+      expect(component.count()).toBe(-1);
     });
   });
 
   describe('reset()', () => {
     it('should reset count to 0', () => {
-      component.count = 42;
+      component.count.set(42);
       component.reset();
-      expect(component.count).toBe(0);
+      expect(component.count()).toBe(0);
     });
 
     it('should reset when button is clicked', () => {
-      component.count = 10;
+      component.count.set(10);
       fixture.detectChanges();
 
       const button = compiled.querySelector('[data-testid="reset-btn"]') as HTMLButtonElement;
       button.click();
       fixture.detectChanges();
 
-      expect(component.count).toBe(0);
+      expect(component.count()).toBe(0);
       const countDisplay = compiled.querySelector('[data-testid="count-display"]');
       expect(countDisplay?.textContent).toBe('0');
     });
@@ -105,12 +103,12 @@ describe('Counter', () => {
     component.increment();
     component.increment();
     component.increment();
-    expect(component.count).toBe(3);
+    expect(component.count()).toBe(3);
 
     component.decrement();
-    expect(component.count).toBe(2);
+    expect(component.count()).toBe(2);
 
     component.reset();
-    expect(component.count).toBe(0);
+    expect(component.count()).toBe(0);
   });
 });
