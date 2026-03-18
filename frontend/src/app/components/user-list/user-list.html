@@ -1,0 +1,38 @@
+<div class="user-list" data-testid="user-list">
+  <h2>Users</h2>
+
+  @if (loading()) {
+    <div class="loading" data-testid="loading-spinner">Loading users...</div>
+  }
+
+  @if (error()) {
+    <div class="error" data-testid="error-message">
+      {{ error() }}
+    </div>
+  }
+
+  @if (!loading() && !error() && users().length > 0) {
+    <div class="users">
+      @for (user of users(); track user.id) {
+        <div class="user-card" [attr.data-testid]="'user-card-' + user.id">
+          <div class="user-info">
+            <h3 data-testid="user-name">{{ user.name }}</h3>
+            <p data-testid="user-email">{{ user.email }}</p>
+            <span data-testid="user-role" class="role">{{ user.role }}</span>
+          </div>
+          <button
+            class="delete-btn"
+            [attr.data-testid]="'delete-btn-' + user.id"
+            (click)="deleteUser(user.id)"
+          >
+            Delete
+          </button>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading() && !error() && users().length === 0) {
+    <div data-testid="empty-state">No users found.</div>
+  }
+</div>
