@@ -26,7 +26,7 @@ export class UserService {
           return z.array(UserSchema).parse(response);
         } catch (error) {
           console.error('User List validation failed:', error);
-          throw new Error('Invalid user data received from API');
+          throw new Error('Invalid user data received from API', { cause: error });
         }
       })
     );
@@ -39,7 +39,7 @@ export class UserService {
           return UserSchema.parse(response);
         } catch (error) {
           console.error('User validation failed:', error);
-          throw new Error('Invalid user data received from API');
+          throw new Error('Invalid user data received from API', { cause: error });
         }
       })
     );
@@ -55,13 +55,13 @@ export class UserService {
             return UserSchema.parse(response);
           } catch (error) {
             console.error('Created user validation failed:', error);
-            throw new Error('Invalid user data received from API');
+            throw new Error('Invalid user data received from API', { cause: error });
           }
         })
       );
     } catch (error) {
       console.error('Create user reuqest validation failed:', error);
-      throw new Error('Invalid user data provided');
+      throw new Error('Invalid user data provided', { cause: error });
     }
   }
 
@@ -75,13 +75,13 @@ export class UserService {
             return UserSchema.parse(response);
           } catch (error) {
             console.error('Updated user validation failed:', error);
-            throw new Error('Invalid user data received from API');
+            throw new Error('Invalid user data received from API', { cause: error });
           }
         })
       );
     } catch (error) {
       console.error('Updated user validation failed:', error);
-      throw new Error('Invalid user data provided');
+      throw new Error('Invalid user data provided', { cause: error });
     }
   }
 
