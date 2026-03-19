@@ -38,8 +38,16 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
         run: pnpm install --frozen-lockfile
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: Check code formatting
         run: pnpm format:check
@@ -94,8 +102,16 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
         run: pnpm install --frozen-lockfile
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: build application
         run: pnpm build
