@@ -1,7 +1,8 @@
 // import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 
-import { UserService, User } from '../../services/User/user';
+import { UserService } from '../../services/User/user';
+import { type User } from '../../schemas/generated/schemas';
 
 @Component({
   selector: 'app-user-list',
@@ -45,11 +46,12 @@ export class UserList implements OnInit {
 
     this.userService.deleteUser(id).subscribe({
       next: () => {
+        console.log('✅ User deleted');
         this.users.set(this.users().filter((u) => u.id !== id));
       },
       error: (err) => {
-        this.error.set('Failed to delete user');
-        console.error('Error deleting user:', err);
+        console.error('❌ Error deleting user:', err);
+        this.error.set('Failed to delete user. Please try again');
       },
     });
   }
