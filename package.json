@@ -4,6 +4,7 @@
   "description": "Full-stack project with OpenAPI contract",
   "main": "index.js",
   "scripts": {
+    "postinstall": "pnpm openapi:generate-zod",
     "openapi:validate": "redocly lint openapi/openapi.yml --config .redocly.yaml",
     "openapi:bundle": "redocly bundle openapi/openapi.yml -o openapi/openapi.json",
     "openapi:generate-zod": "node scripts/generate-zod.js",
