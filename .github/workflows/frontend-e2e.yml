@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "frontend/**"
+      - "openapi/**"
       - ".github/workflows/frontend-e2e.yml"
 
   # Allow manual trigger
@@ -27,20 +28,28 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: "./frontend/.nvmrc"
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
+        run: pnpm install --frozen-lockfile  
+
+      - name: Install frontend dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
@@ -50,7 +59,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: frontend/playwright-report/
@@ -58,7 +67,7 @@ jobs:
 
       - name: Upload test videos
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-videos
           path: frontend/test-results/

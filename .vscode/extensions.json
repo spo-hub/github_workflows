@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "redocly.openapi-vs-code",
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "angular.ng-template"
+  ]
+}

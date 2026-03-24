@@ -7,6 +7,7 @@ on:
       - develop
     paths:
       - "frontend/**"
+      - "openapi/**"
       - ".github/workflows/frontend-ci.yml"
   pull_request:
     branches:
@@ -14,6 +15,7 @@ on:
       - develop
     paths:
       - "frontend/**"
+      - "openapi/**"
 
 jobs:
   test:
@@ -26,20 +28,28 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: "./frontend/.nvmrc"
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
         run: pnpm install --frozen-lockfile
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: Check code formatting
         run: pnpm format:check
@@ -54,7 +64,7 @@ jobs:
         run: pnpm test --coverage
 
       - name: Upload coverage reports
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: always()
         with:
           files: ./frontend/coverage/lcov.info
@@ -64,7 +74,7 @@ jobs:
         continue-on-error: true
 
       - name: Archive coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage-report
@@ -82,26 +92,34 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: "./frontend/.nvmrc"
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
         run: pnpm install --frozen-lockfile
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: build application
         run: pnpm build
 
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifacts
           path: frontend/dist/
