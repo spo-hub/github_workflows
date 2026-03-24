@@ -7,6 +7,7 @@ on:
       - develop
     paths:
       - "frontend/**"
+      - "openapi/**"
       - ".github/workflows/frontend-ci.yml"
   pull_request:
     branches:
@@ -14,6 +15,7 @@ on:
       - develop
     paths:
       - "frontend/**"
+      - "openapi/**"
 
 jobs:
   test:
@@ -30,8 +32,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v5
-        with:
-          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -40,8 +40,16 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
         run: pnpm install --frozen-lockfile
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: Check code formatting
         run: pnpm format:check
@@ -88,8 +96,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v5
-        with:
-          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -98,8 +104,16 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: "./frontend/pnpm-lock.yaml"
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        working-directory: .
         run: pnpm install --frozen-lockfile
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Zod schemas
+        working-directory: .
+        run: pnpm openapi:generate-zod
 
       - name: build application
         run: pnpm build

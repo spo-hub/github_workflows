@@ -49,11 +49,7 @@ test.describe('User list with API Mocking ', () => {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify([
-            { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-            { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-            { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Editor' },
-          ]),
+          body: JSON.stringify(mockUsers),
         });
       }
     );
@@ -65,7 +61,7 @@ test.describe('User list with API Mocking ', () => {
 
     await expect(page.getByTestId('user-name').first()).toHaveText('John Doe');
     await expect(page.getByTestId('user-email').first()).toHaveText('john@example.com');
-    await expect(page.getByTestId('user-role').first()).toHaveText('Admin');
+    await expect(page.getByTestId('user-role').first()).toHaveText('admin');
 
     const userCards = page.locator('[data-testid^="user-card-"]');
     await expect(userCards).toHaveCount(3);
@@ -121,8 +117,8 @@ test.describe('User list with API Mocking ', () => {
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify([
-            { id: 1, name: 'john Doe', email: 'john@example.com', role: 'Admin' },
-            { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+            { id: 1, name: 'john Doe', email: 'john@example.com', role: 'admin' },
+            { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'user' },
           ]),
         });
       }
@@ -187,7 +183,7 @@ test.describe('User list with API Mocking ', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify([
-          { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+          { id: 1, name: 'John Doe', email: 'john@example.com', role: 'admin' },
         ]),
       });
     });
@@ -198,10 +194,7 @@ test.describe('User list with API Mocking ', () => {
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
-            id: 1,
-            name: 'John Doe',
-            email: 'john@example.com',
-            role: 'Admin',
+            ...mockUsers[0],
             bio: 'Software Engineer',
           }),
         });
@@ -209,6 +202,133 @@ test.describe('User list with API Mocking ', () => {
     });
 
     await page.goto('/');
+    await expect(page.getByTestId('user-card-1')).toBeVisible();
+  });
+});
+
+test.describe('User List with Zod Validation', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+
+  test('should display users with valid data', async ({ page }) => {
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockUsers),
+      });
+    });
+
+    await page.goto('/');
+    await expect(page.getByTestId('loading-spinner')).not.toBeVisible();
+    await expect(page.getByTestId('user-card-1')).toBeVisible();
+    await expect(page.getByTestId('user-name').first()).toHaveText('John Doe');
+  });
+
+  test('should show error for invalid email in response', async ({ page }) => {
+    const invalidUser = [{ id: 1, name: 'John Doe', email: 'not-an-email', role: 'admin' }];
+
+    // Listen to console errors
+    const consoleErrors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text());
+      }
+    });
+
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(invalidUser),
+      });
+    });
+
+    await page.goto('/');
+
+    // Should show erroor message
+    await expect(page.getByTestId('error-message')).toBeVisible();
+    await expect(page.getByTestId('error-message')).toContainText('Failed to load users');
+
+    // Should log validation error to console
+    expect(consoleErrors.some((err) => err.includes('validation failed'))).toBe(true);
+  });
+
+  test('should show error for missing required fields', async ({ page }) => {
+    const invalidUser = [{ id: 1, name: 'John Doe' }];
+
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(invalidUser),
+      });
+    });
+
+    await page.goto('/');
+
+    await expect(page.getByTestId('error-message')).toBeVisible();
+    await expect(page.getByTestId('error-message')).toContainText('Failed to load users');
+  });
+
+  test('should show error for invalid role enum', async ({ page }) => {
+    const invalidUser = [
+      { id: 1, name: 'Johne Doe', email: 'john@example.com', role: 'superadmin' },
+    ];
+
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(invalidUser),
+      });
+    });
+
+    await page.goto('/');
+
+    await expect(page.getByTestId('error-message')).toBeVisible();
+  });
+
+  test('should show error for wrong data type', async ({ page }) => {
+    const invalidUser = [{ id: '1', name: 'John Doe', email: 'john@example.com', role: 'admin' }];
+
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(invalidUser),
+      });
+    });
+
+    await page.goto('/');
+
+    await expect(page.getByTestId('error-message')).toBeVisible();
+  });
+
+  test('should handle valid data after previous error', async ({ page }) => {
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify([{ id: 1, name: 'John' }]), // Invalid
+      });
+    });
+
+    await page.goto('/');
+    await expect(page.getByTestId('error-message')).toBeVisible();
+
+    // Unroute and set up valid data
+    await page.unroute('**/api/users');
+    await page.route('**/api/users', (route) => {
+      route.fulfill({
+        status: 200,
+        body: JSON.stringify(mockUsers),
+      });
+    });
+
+    await page.reload();
+
+    await expect(page.getByTestId('error-message')).not.toBeVisible();
     await expect(page.getByTestId('user-card-1')).toBeVisible();
   });
 });

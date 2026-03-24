@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { count } from 'node:console';
 
 test.describe('Counter Component', () => {
   test.beforeEach(async ({ page }) => {

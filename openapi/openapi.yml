@@ -139,7 +139,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-                
+
 
 components:
   schemas:
@@ -190,7 +190,7 @@ components:
           examples: [jane@example.com]
         role:
           type: string
-          enum: [admmin, user, editor]
+          enum: [admin, user, editor]
           examples: [user]
 
     UpdateUserRequest:
