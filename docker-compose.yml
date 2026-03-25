@@ -6,8 +6,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "8080:80"
     container_name: tutorial-Frontend
     restart: unless-stopped
     networks:
@@ -15,13 +13,13 @@ services:
     # depends_on:
     #   - backend
 
+
+
   # Backend service (placeholder for when you creae it)
   # backend:
   #   build:
   #     context: ./backend
   #     dockerfile: Dockerfile
-  #   ports:
-  #    - "3000:3000"
   #   container_name: tutorial-backend
   #   restart: unless-stopped
   #   environment:
@@ -35,8 +33,6 @@ services:
   database:
     image: dhi.io/postgres:18-alpine3.22-dev
     container_name: tutorial-database
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -51,6 +47,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
 
 # Top-level networks declaration
 networks:

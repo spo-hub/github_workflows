@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  frontend:
+    # no port mapping in pord (handled by reverse proxy/load balancer)
+    # Or use specific port:
+    ports:
+      - "80:80"
+
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    # Strict log rotation
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        compress: "true"
+    environment:
+      - ENV=production
+    # Production restart policy
+    restart: always
+
+  # backend:
+  #   ports:
+  #    - "3000:3000"  # Or handled by reverse proxy
+  #    # NO source code mounting in production
+  #    # NO debug ports
+
+  #   command: node server.js   # Production command (no nodemon)
+
+  #   environment:
+  #    - NODE_ENV=production
+  #    - LOG_LEVEL=info   # Less verbose
+
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1.0'
+  #         memory: 512M
+  #       reservations:
+  #         cpus: '0.5'
+  #         memory: 256M 
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #       compress: "true"
+
+  #   restart: always
+  #   # Production health check
+  #   healthcheck:
+  #     test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 40s
+
+  database:
+    # No port exposure (internal only, accessed via backend)
+    # Commented out ofr security:
+    # ports:
+    #   - "5432:5432"
+
+    # Production resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M 
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+        compress: "true"
+
+    restart: always

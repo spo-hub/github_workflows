@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  frontend:
+    ports:
+      - "8080:80"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'      # Max 25% of one CPU
+          memory: 128M      # Max 128MB RAM
+        reservations:
+          cpus: '0.1'       # Guarantted 10% CPU
+          memory: 64M       # Guaranteed 64MB RAM
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"     # Each log file max 10MB
+        max-file: "3"       # Keep 3 log files
+        # total max logs: 10MB x 3 = 300MB per container
+    environment:
+      - ENV=development
+
+  # Backend service (placeholder for when you creae it)
+  # backend:
+  #   ports:
+  #   - "3000:3000"   # API port
+  #.  - "92229:9229"  # Node.js debugger port
+  #   # Mount source code for hot reload
+  #   volumes:
+  #    - ./backend:/app
+  #    - /app/node_modules # Don't overwrite node_modules
+  #   command: npm run dev # Development command
+  #   environment:
+  #    - NODE_ENV=development
+  #    - DEBUG=* # Verbose debugging
+  #    - LOG_LEVEL=debug
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1.0'
+  #         moemory: 512M
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+
+  database:
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'       # Max 1.5 CPUs
+          memory: 1G        # Max 1GB RAM
+        reservations:
+          cpus: '0.5'       # Guaranteed 50% CPU
+          memory: 512M      # Guaranteed 512MB RAM
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+        # Total: 50MB max logs
+    environment:
+      - POSTGRES_LOG_STATEMENT=all  # Log all queries (dev only!
