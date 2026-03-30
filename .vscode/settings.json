@@ -15,5 +15,7 @@
     "**/.gradle": false,
     "**/.kotlin": false
   },
-  "JetBrains.kotlin.lsp.enabled": false
+  "JetBrains.kotlin.lsp.enabled": false,
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.compile.nullAnalysis.mode": "automatic"
 }
