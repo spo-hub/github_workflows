@@ -1,0 +1,55 @@
+# ================================
+# Java and kotlin build output
+# ================================
+build/
+.gradle/
+*.jar
+
+
+# ================================
+# Test reports
+# ================================
+test-results/
+
+# ================================
+# Environment & log files
+# ================================
+*.env*
+!*.env.production
+*.log
+*.tsbuildinfo
+
+# ================================
+# IDE & OS-specific files
+# ================================
+.vscode/
+.idea/
+*.iml/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ================================
+# Version control & CI files
+# ================================
+.git
+.gitignore
+
+# ================================
+# Docker & local orchestration
+# ================================
+Dockerfile
+Dockerfile.*
+.dockerignore
+docker-compose.yml
+docker-compose*.yml
+
+# ================================
+# Miscellaneous
+# ================================
+*.log
+*.bak
+*.old
+*.tmp
+HELP.md
+README.md
