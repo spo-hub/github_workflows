@@ -17,7 +17,7 @@ import z from 'zod';
 export class UserService {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'http://localhost:8080/api';
 
   getUsers(): Observable<User[]> {
     return this.http.get(`${this.apiUrl}/users`).pipe(
