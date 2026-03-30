@@ -1,0 +1,5 @@
+ALTER TABLE users
+ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user';
+
+ALTER TABLE users
+RENAME COLUMN username TO name;
