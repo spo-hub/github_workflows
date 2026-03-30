@@ -89,4 +89,11 @@ tasks.withType<Test> {
 
 tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
 	environment(envVars)
+	// Disable ANSI colors to improve VS Code terminal performance
+	systemProperty("spring.output.ansi.enabled", "NEVER")
+	// Reduce console logging verbosity
+	systemProperty("logging.pattern.console", "%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n")
+}
+tasks.named<Test>("test") {
+	environment(envVars) // Load .env for tests too
 }

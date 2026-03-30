@@ -7,7 +7,8 @@ import java.time.LocalDateTime
 @Table("users")
 data class User(
     @Id val id: Long? = null,
-    val username: String,
+    val name: String,
     val email: String,
+    val role: String,
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
