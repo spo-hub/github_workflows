@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
 @Table("users")
-data class User(
+data class UserEntity(
     @Id val id: Long? = null,
     val name: String,
     val email: String,

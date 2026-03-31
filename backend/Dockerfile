@@ -11,15 +11,18 @@ FROM dhi.io/eclipse-temurin:${JAVA_JDK_VERSION} AS builder
 WORKDIR /app
 
 # Copy Gradle wrapper adn build files
-COPY gradlew .
-COPY gradle gradle/
-COPY build.gradle.kts .
-COPY settings.gradle.kts .
+COPY backend/gradlew .
+COPY backend/gradle gradle/
+COPY backend/build.gradle.kts .
+COPY backend/settings.gradle.kts .
+
+# Copy OpenAPI spec
+COPY openapi ../openapi
 
 # Download dependencies (cached layer if build files don't change)
 RUN ./gradlew dependencies --no-daemon || true
 
-COPY src src/
+COPY backend/src src/
 
 # Build the JAR (skip test for faster builds)
 RUN ./gradlew bootJar --no-daemon -x test

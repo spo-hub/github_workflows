@@ -18,8 +18,8 @@ services:
   # Backend service (placeholder for when you creae it)
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: tutorial-backend
     restart: unless-stopped
     environment:
